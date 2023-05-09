@@ -1,6 +1,6 @@
+const { getEndpoints } = require("../models/api.models")
 
-exports.getStatus = (req, res) => {
-    res.status(200).send({
-        msg: "all good here!"
-    })
+exports.getApi = (req, res) => {
+    const endpoints = getEndpoints()
+    res.status(200).send({ endpoints: endpoints})
 }
