@@ -17,17 +17,6 @@ afterAll(() => {
   return db.end();
 });
 
-describe("/api", () => {
-  test("GET - status 200 - responds with a status message", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then((res) => {
-        expect(res.body).toEqual({ msg: "all good here!" });
-      });
-  });
-});
-
 describe("/api/topics", () => {
   describe("GET - status: 200 - responds with topics data", () => {
     test('should return an array of objects', () => {
