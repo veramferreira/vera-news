@@ -1,5 +1,5 @@
 const express = require("express");
-const { getStatus } = require("./controllers/api.controller");
+const { getApi } = require("./controllers/api.controller");
 const { getTopics } = require("./controllers/topics.controller");
 const { psqlErrors, otherErrors } = require("./errors");
 const app = express();
@@ -8,7 +8,7 @@ app.use(express.json())
 
 // Endpoints
 
-app.get('/api', getStatus)
+app.get('/api', getApi)
 
 app.get('/api/topics', getTopics)
 

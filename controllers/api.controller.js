@@ -1,6 +1,5 @@
+const endpoints = require("../endpoints.json");
 
-exports.getStatus = (req, res) => {
-    res.status(200).send({
-        msg: "all good here!"
-    })
-}
+exports.getApi = (req, res) => {
+  res.status(200).send({ endpoints: endpoints });
+};
