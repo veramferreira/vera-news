@@ -27,18 +27,20 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
     });
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-exports.insertComments = () => {
-  
-}
+exports.createComment = (article_id, newComment) => {
+  const { username, body } = newComment;
+  return db
+    .query(
+      `
+  INSERT INTO comments
+  (article_id, body, author)
+  VALUES
+  ($1, $2, $3)
+  RETURNING comments.author AS username, comments.body
+  `,
+      [article_id, body, username]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};

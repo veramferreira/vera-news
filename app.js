@@ -9,6 +9,8 @@ const {
 } = require("./controllers/articles.controller");
 const app = express();
 
+app.use(express.json())
+
 // Endpoints
 
 app.get("/api", getApi);

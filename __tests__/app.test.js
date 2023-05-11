@@ -153,20 +153,34 @@ describe("/api/articles", () => {
 
 
 
-// describe('POST /api/articles/:article_id/comments', () => {
-//   describe('POST - status 201 - responds with the newly created comment', () => {
-//     test('should insert an new object in the selected article with two properties: username and body', () => {
-//       const testNewComment = {
-//         username:"butter_bridge",
-//         body: " I carry a log — yes. Is it funny to you? It is not to me."
-//       }
-//       return request(app)
-//       .post("/api/articles/2/comments")
-//       .send(testNewComment)
-//       .expect(201)
-//       .then(({body})=> {
-//         console.log((body.result));
-//       })
-//     });
-//   });
-// });
+describe('POST /api/articles/:article_id/comments', () => {
+  describe('POST - status 201 - responds with the newly created comment', () => {
+    test('should insert an new object in the selected article with two properties: username and body', () => {
+      const testNewComment = {
+        username:"butter_bridge",
+        body: " I carry a log — yes. Is it funny to you? It is not to me."
+      }
+      return request(app)
+      .post("/api/articles/2/comments")
+      .send(testNewComment)
+      .expect(201)
+      .then((result) => {
+        const comment = result.body.posted
+        expect(comment.username).toBe('butter_bridge')
+        expect(comment.body).toBe(' I carry a log — yes. Is it funny to you? It is not to me.')
+      })
+    });
+  });
+  // describe('POST - error status', () => {
+  //   test("error status: 400 - All values are missing", () => {
+  //     return request(app)
+  //     .post("/api/articles/3/comments")
+  //     .send({})
+  //     .expect(400)
+  //     .then((result) => {
+  //         const comment = result.body.posted
+  //         expect(comment).toBe("Some values are missing");
+  //     })
+  // })
+  // });
+});
