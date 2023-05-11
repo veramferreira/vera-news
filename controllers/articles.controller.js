@@ -2,6 +2,7 @@ const {
   selectArticleById,
   fetchArticles,
   createComment,
+  selectCommentByArticleId,
 } = require("../models/articles.models");
 
 exports.getArticleById = (req, res, next) => {
@@ -26,12 +27,17 @@ exports.getArticles = (req, res, next) => {
     });
 };
 
-
-
-
-
-
-
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id: article_id } = req.params;
+  const { sort_by, order } = req.query;
+  selectCommentByArticleId(article_id, sort_by, order)
+    .then((result) => {
+      res.status(200).send({ comments: result });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.postCommentByArticleId = (req, res, next) => {
   const { article_id: article_id } = req.params;
