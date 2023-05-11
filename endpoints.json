@@ -43,5 +43,21 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "returns an array of comments for the requested article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": "10",
+          "votes": 0,
+          "created_at": 1527695953341,
+          "author": "mitch",
+          "body": "I'm a big fan",
+          "article_id": 3
+        }
+      ]
+    }
   }
 }
