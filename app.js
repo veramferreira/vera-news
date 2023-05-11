@@ -12,6 +12,9 @@ app.get('/api', getApi)
 
 app.get('/api/topics', getTopics)
 
+
+app.get('api/articles')
+
 // Error handling
 
 app.use(psqlErrors)

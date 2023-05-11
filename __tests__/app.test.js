@@ -2,6 +2,7 @@ const app = require("../app");
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+// const sort = require('jest-sorted')
 const endpoints = require("../endpoints.json");
 const {
   topicData,
@@ -60,3 +61,27 @@ describe("/api/topics", () => {
     });
   });
 });
+
+// describe('/api/articles', () => {
+//   describe('GET - status 200 - responds with all articles', () => {
+//     test('should return an array with several articles', () => {
+//       return request(app)
+//       .get('/api/articles')
+//       .expect(200)
+//       .then(({body}) => {
+//         expect(body.result.length).toBeGreaterThan(0)
+//         const articles = body.result
+//         articles.forEach((article) => {
+//             expect(typeof article.article_id).toBe("number");
+//             expect(typeof article.title).toBe("string");
+//             expect(typeof article.topic).toBe("string");
+//             expect(typeof article.author).toBe("string");
+//             expect(typeof article.created_at).toBe("string");
+//             expect(typeof article.votes).toBe("number");
+//             expect(typeof article.article_img_url).toBe("string");
+//             expect(typeof article.comment_count).toBe("string");
+//         })
+//       })
+//     });
+//   });
+// });
