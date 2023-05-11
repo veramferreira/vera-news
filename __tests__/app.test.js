@@ -10,6 +10,7 @@ const {
   articleData,
   commentData,
 } = require("../db/data/test-data/index");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => {
   return seed({ topicData, userData, articleData, commentData });
@@ -112,7 +113,6 @@ describe("/api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body }) => {
-          console.log(body.articles);
           expect(body.articles).toBeSortedBy("created_at", {
             descending: true,
           });
@@ -139,3 +139,34 @@ describe("/api/articles", () => {
     });
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// describe('POST /api/articles/:article_id/comments', () => {
+//   describe('POST - status 201 - responds with the newly created comment', () => {
+//     test('should insert an new object in the selected article with two properties: username and body', () => {
+//       const testNewComment = {
+//         username:"butter_bridge",
+//         body: " I carry a log — yes. Is it funny to you? It is not to me."
+//       }
+//       return request(app)
+//       .post("/api/articles/2/comments")
+//       .send(testNewComment)
+//       .expect(201)
+//       .then(({body})=> {
+//         console.log((body.result));
+//       })
+//     });
+//   });
+// });

@@ -26,3 +26,19 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
       return result.rows;
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.insertComments = () => {
+  
+}
