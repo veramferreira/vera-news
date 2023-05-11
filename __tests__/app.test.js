@@ -190,19 +190,6 @@ describe("/api/articles", () => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe('POST /api/articles/:article_id/comments', () => {
   describe('POST - status 201 - responds with the newly created comment', () => {
     test('should insert an new object in the selected article with two properties: username and body', () => {
