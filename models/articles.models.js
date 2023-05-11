@@ -23,7 +23,6 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
   `
     )
     .then((result) => {
-      console.log(result.rows);
       return result.rows;
     });
 };
