@@ -2,7 +2,7 @@ const express = require("express");
 const { getApi } = require("./controllers/api.controller");
 const { getTopics } = require("./controllers/topics.controller");
 const { psqlErrors, otherErrors } = require("./errors");
-const { getArticle } = require("./controllers/article_id.controller");
+const { getArticlebyId } = require("./controllers/article_id.controller");
 const app = express();
 
 // Endpoints
@@ -11,7 +11,7 @@ app.get("/api", getApi);
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticle);
+app.get("/api/articles/:article_id", getArticlebyId);
 
 // Error handling
 
