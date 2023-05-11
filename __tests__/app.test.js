@@ -2,7 +2,7 @@ const app = require("../app");
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
-// const sort = require('jest-sorted')
+const sort = require("jest-sorted");
 const endpoints = require("../endpoints.json");
 const {
   topicData,
@@ -25,7 +25,7 @@ describe("/api", () => {
       .get("/api")
       .expect(200)
       .then((res) => {
-        expect(res.body).toEqual({ endpoints: endpoints});
+        expect(res.body).toEqual({ endpoints: endpoints });
       });
   });
 });
@@ -62,26 +62,80 @@ describe("/api/topics", () => {
   });
 });
 
-// describe('/api/articles', () => {
-//   describe('GET - status 200 - responds with all articles', () => {
-//     test('should return an array with several articles', () => {
-//       return request(app)
-//       .get('/api/articles')
-//       .expect(200)
-//       .then(({body}) => {
-//         expect(body.result.length).toBeGreaterThan(0)
-//         const articles = body.result
-//         articles.forEach((article) => {
-//             expect(typeof article.article_id).toBe("number");
-//             expect(typeof article.title).toBe("string");
-//             expect(typeof article.topic).toBe("string");
-//             expect(typeof article.author).toBe("string");
-//             expect(typeof article.created_at).toBe("string");
-//             expect(typeof article.votes).toBe("number");
-//             expect(typeof article.article_img_url).toBe("string");
-//             expect(typeof article.comment_count).toBe("string");
-//         })
-//       })
-//     });
-//   });
-// });
+describe("/api/articles/:article_id", () => {
+  describe("GET - status:200 - responds with article's data", () => {
+    test("should respond with an object (article) containing all 8 properties)", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.result.length).toBeGreaterThan(0);
+          const article = body.result[0];
+          expect(article.article_id).toBe(1);
+          body.result.forEach((article) => {
+            expect(typeof article.title).toBe("string");
+            expect(typeof article.topic).toBe("string");
+            expect(typeof article.author).toBe("string");
+            expect(typeof article.body).toBe("string");
+            expect(typeof article.created_at).toBe("string");
+            expect(typeof article.votes).toBe("number");
+            expect(typeof article.article_img_url).toBe("string");
+          });
+        });
+    });
+  });
+  describe("GET - error status", () => {
+    test("error status: 400 - invalid article id", () => {
+      return request(app)
+        .get("/api/articles/invalidid")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request: invalid data type!");
+        });
+    });
+    test("error status 404 - valid but non-existent article id", () => {
+      return request(app)
+        .get("/api/articles/5000")
+        .expect(404)
+        .then((res) => {
+          const message = res.body.msg;
+          expect(message).toBe("article not found!");
+        });
+    });
+  });
+});
+
+describe("/api/articles", () => {
+  describe("GET - status 200 - responds with all articles", () => {
+    test("all articles should be sorted in descending order by date", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          console.log(body.articles);
+          expect(body.articles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
+    test("should return all articles with the correct properties", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles.length).toBeGreaterThan(0);
+          const articles = body.articles;
+          articles.forEach((article) => {
+            expect(typeof article.article_id).toBe("number");
+            expect(typeof article.title).toBe("string");
+            expect(typeof article.topic).toBe("string");
+            expect(typeof article.author).toBe("string");
+            expect(typeof article.created_at).toBe("string");
+            expect(typeof article.votes).toBe("number");
+            expect(typeof article.article_img_url).toBe("string");
+            expect(typeof article.comment_count).toBe("string");
+          });
+        });
+    });
+  });
+});
