@@ -188,3 +188,24 @@ describe("/api/articles", () => {
     });
   });
 });
+
+describe("PATCH - /api/articles/:article_id", () => {
+  describe("PATCH - status: 200 - update votes count", () => {
+    test("should increment the total number of votes on the given endpoint", () => {
+      const testVotes = { inc_votes: 2 };
+      const testArticle = {
+        title: "title",
+        topic: "topic",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2023-05-12T20:11:00.000Z",
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        votes: 105,
+      };
+      return request(app).patch('/api/articles/3').send(testArticle).then(({body}) => {
+        
+      })
+    });
+  });
+});
