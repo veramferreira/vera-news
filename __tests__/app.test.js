@@ -189,6 +189,18 @@ describe("/api/articles", () => {
   });
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
 describe("PATCH - /api/articles/:article_id", () => {
   describe("PATCH - status: 200 - update votes count", () => {
     test("should increment the total number of votes on the given endpoint", () => {
