@@ -33,13 +33,13 @@
       "articles": [
         {
           "article_id": 1,
-        "title": "Living in the shadow of a great man",
-        "topic": "mitch",
-        "author": "butter_bridge",
-        "body": "I find this existence challenging",
-        "created_at": "2020-07-09T20:11:00.000Z",
-        "votes": 100,
-        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          "title": "Living in the shadow of a great man",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "I find this existence challenging",
+          "created_at": "2020-07-09T20:11:00.000Z",
+          "votes": 100,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
         }
       ]
     }
@@ -52,10 +52,26 @@
         {
           "comment_id": "10",
           "votes": 0,
-          "created_at": 1527695953341,
+          "created_at": "2020-07-09T20:11:00.000Z",
           "author": "mitch",
           "body": "I'm a big fan",
           "article_id": 3
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a new comment to the requested article and responds with the posted comment",
+    "queries": [],
+    "requestBody": {
+      "username": "butter_bridge",
+      "body": "I carry a log — yes. Is it funny to you? It is not to me."
+    },
+    "exampleResponse": {
+      "posted": [
+        {
+          "username": "butter_bridge",
+          "body": "I carry a log — yes. Is it funny to you? It is not to me."
         }
       ]
     }

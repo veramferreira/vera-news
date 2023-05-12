@@ -1,6 +1,7 @@
 const {
   selectArticleById,
   fetchArticles,
+  createComment,
   selectCommentByArticleId,
 } = require("../models/articles.models");
 
@@ -37,3 +38,13 @@ exports.getCommentsByArticleId = (req, res, next) => {
       next(err);
     });
 };
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { article_id: article_id } = req.params;
+  createComment(article_id, req.body).then((result) => {
+    res.status(201).send({posted: result})
+  })
+  .catch((err) => {
+    next(err);
+  });
+}
