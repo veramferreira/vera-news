@@ -270,4 +270,17 @@ describe("POST - error status", () => {
         expect(res.body.msg).toBe("article not found!");
       });
   });
+  test('error status: 404 - username not found', () => {
+    const testNewComment = {
+      username: "not_a_username",
+      body: "I carry a log — yes. Is it funny to you? It is not to me.",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(testNewComment)
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("username not found!");
+      });
+  });
 });
