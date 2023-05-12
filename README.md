@@ -34,15 +34,6 @@ Serves an HTML page with documentation for all the available endpoints
 
 Get all the topics
 
-### **POST /api/topics/:topic_id/articles**
-
-Add a new article to a topic. This route requires a JSON body with a title and body key and value pair e.g:
-
-`{
-  "title": "This is my article title",
-  "body": "This is my article body"
-}`
-
 ### **GET /api/articles**
 
 Returns all the articles
@@ -51,8 +42,19 @@ Returns all the articles
 
 Returns all an individual article with its comments
 
-### **POST /api/articles/:article_id**
+### **GET /api/articles/:article_id/comments/**
 
-Add a new comment to an article. This route requires a JSON body with a message key and value pair e.g:
+Returns an array of comments for the requested article
 
-`{"message": "This is my new comment"}`
+### **POST /api/articles/:article_id/comments**
+
+Adds a new comment to the requested article and responds with the posted comment e.g:
+
+`{ posted: 
+{"username": "butter_bridge",
+"body": "I carry a log — yes. Is it funny to you? It is not to me."}
+}`
+
+### **PATCH /api/articles/:article_id**
+Updates the requested article's vote count based on the value included in the body. 
+e.g. { inc_votes : 1 } would increment the current article's vote property by 1, { inc_votes : -100 } would decrement the current article's vote property by 100. It returns the updated article.
