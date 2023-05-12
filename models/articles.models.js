@@ -58,20 +58,15 @@ exports.createComment = (article_id, newComment) => {
 
   // check if any of the values given are invalid data
   if (typeof username !== "string" || typeof body !== "string") {
-    return Promise.reject({ status: 400, msg: "ooops! bad request: invalid data!" });
+    return Promise.reject({
+      status: 400,
+      msg: "ooops! bad request: invalid data!",
+    });
   }
 
-  // check if username exists
+  // check if article_id is valid
   return db
-    .query("SELECT * FROM users WHERE username = $1", [username])
-    .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "username not found!" });
-      }
-
-      // check if article_id is valid
-      return db.query("SELECT * FROM articles WHERE article_id = $1", [article_id]);
-    })
+    .query("SELECT * FROM articles WHERE article_id = $1", [article_id])
     .then((result) => {
       if (result.rows.length === 0) {
         return Promise.reject({ status: 404, msg: "article not found!" });
@@ -86,11 +81,12 @@ exports.createComment = (article_id, newComment) => {
         ($1, $2, $3)
         RETURNING comments.author AS username, comments.body
         `,
-        [article_id, body, username]);
+        [article_id, body, username]
+      );
     })
     .then((result) => {
       if (result.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "article not found!" });
+        return Promise.reject({ status: 404, msg: "username not found!" });
       }
       return result.rows[0];
     });
