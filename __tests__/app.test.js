@@ -368,3 +368,16 @@ describe("PATCH - /api/articles/:article_id", () => {
   });
   });
 });
+
+// describe.only('DELETE - /api/comments/:comment_id', () => {
+//   describe('DELETE - status 204 - content deleted', () => {
+//     test('should delete the comment selected', () => {
+//       return request(app)
+//       .delete("/api/comments/3")
+//       .expect(204)
+//       .then((res) => {
+//         console.log(res);
+//       })
+//     });
+//   });
+// });
