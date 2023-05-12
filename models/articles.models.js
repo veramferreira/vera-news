@@ -91,3 +91,30 @@ exports.createComment = (article_id, newComment) => {
       return result.rows[0];
     });
 };
+
+exports.updateVotesByArticleId = (article_id, votes) => {
+  //check if value is provided
+  if (!votes) {
+    return Promise.reject({ status: 400, msg: "required value missing!" });
+  }
+
+  //check if value passed in is valid data
+  if (typeof votes !== "number") {
+    return Promise.reject({
+      status: 400,
+      msg: "ooops! bad request: invalid data!",
+    });
+  }
+
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+      [votes, article_id]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "article not found!" });
+      }
+      return result.rows[0];
+    });
+};

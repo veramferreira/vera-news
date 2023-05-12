@@ -209,78 +209,162 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
     });
   });
+  describe("POST - error status", () => {
+    test("error status: 400 - invalid endpoint", () => {
+      const testNewComment = {
+        username: "butter_bridge",
+        body: " I carry a log — yes. Is it funny to you? It is not to me.",
+      };
+      return request(app)
+        .post("/api/articles/invalid_id/comments")
+        .expect(400)
+        .send(testNewComment)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request: invalid data type!");
+        });
+    });
+    test("error status: 400 - invalid data passed in", () => {
+      const testNewComment = {
+        username: "butter_bridge",
+        body: 123456,
+      };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .expect(400)
+        .send(testNewComment)
+        .then(({ body }) => {
+          expect(body.msg).toBe("ooops! bad request: invalid data!");
+        });
+    });
+    test("error status: 400 - one of the values is missing", () => {
+      const testNewComment = { username: "butter_bridge" };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(testNewComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("required values missing!");
+        });
+    });
+    test("error status: 400 - all values are missing", () => {
+      const testNewComment = {};
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(testNewComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("required values missing!");
+        });
+    });
+    test("error status: 404 - valid but non-existent article id", () => {
+      const testNewComment = {
+        username: "butter_bridge",
+        body: " I carry a log — yes. Is it funny to you? It is not to me.",
+      };
+      return request(app)
+        .post("/api/articles/5999/comments")
+        .send(testNewComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("article not found!");
+        });
+    });
+    test("error status: 404 - username not found", () => {
+      const testNewComment = {
+        username: "not_a_username",
+        body: "I carry a log — yes. Is it funny to you? It is not to me.",
+      };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(testNewComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("username not found!");
+        });
+    });
+  });
 });
-describe("POST - error status", () => {
-  test("error status: 400 - invalid endpoint", () => {
-    const testNewComment = {
-      username: "butter_bridge",
-      body: " I carry a log — yes. Is it funny to you? It is not to me.",
-    };
-    return request(app)
-      .post("/api/articles/invalid_id/comments")
-      .expect(400)
-      .send(testNewComment)
-      .then(({ body }) => {
-        expect(body.msg).toBe("bad request: invalid data type!");
-      });
+
+describe("PATCH - /api/articles/:article_id", () => {
+  describe("PATCH - status: 200 - update votes count", () => {
+    test("should increment the total number of votes on the given endpoint by the number of votes given", () => {
+      const testVotes = { inc_votes: 5 };
+      return request(app)
+        .patch("/api/articles/3")
+        .send(testVotes)
+        .then(({ body }) => {
+          const article = body.result;
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch");
+          expect(article.topic).toBe("mitch");
+          expect(article.author).toBe("icellusedkars");
+          expect(article.body).toBe("some gifs");
+          expect(article.created_at).toBe("2020-11-03T09:12:00.000Z");
+          expect(article.votes).toBe(5);
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
+        });
+    });
+    test("should decrement the total number of votes on the given endpoint by the number of votes given", () => {
+      const testVotes = { inc_votes: -2 };
+      return request(app)
+        .patch("/api/articles/3")
+        .send(testVotes)
+        .then(({ body }) => {
+          const article = body.result;
+          expect(article.title).toBe("Eight pug gifs that remind me of mitch");
+          expect(article.topic).toBe("mitch");
+          expect(article.author).toBe("icellusedkars");
+          expect(article.body).toBe("some gifs");
+          expect(article.created_at).toBe("2020-11-03T09:12:00.000Z");
+          expect(article.votes).toBe(-2);
+          expect(article.article_img_url).toBe(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
+        });
+    });
   });
-  test("error status: 400 - invalid data passed in", () => {
-    const testNewComment = {
-      username: "butter_bridge",
-      body: 123456,
-    };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .expect(400)
-      .send(testNewComment)
-      .then(({ body }) => {
-        expect(body.msg).toBe("ooops! bad request: invalid data!");
-      });
+  describe("PATCH - error status", () => {
+    test("error status: 400 - invalid endpoint", () => {
+      const testVotes = { inc_votes: -2 };
+      return request(app)
+        .patch("/api/articles/invalid_id")
+        .expect(400)
+        .send(testVotes)
+        .then(({ body }) => {
+          expect(body.msg).toBe("bad request: invalid data type!");
+        });
+    });
+    test("error status: 400 - invalid data passed in", () => {
+      const testVotes = { inc_votes: "invalid data" };
+
+      return request(app)
+        .patch("/api/articles/3")
+        .expect(400)
+        .send(testVotes)
+        .then(({ body }) => {
+          expect(body.msg).toBe("ooops! bad request: invalid data!");
+        });
+    });
+    test("error status: 400 - value not provided", () => {
+      const testVotes = {};
+      return request(app)
+        .patch("/api/articles/3")
+        .send(testVotes)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("required value missing!");
+        });
+    });
+    test("error status: 404 - valid but non-existent article id", () => {
+      const testVotes = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/articles/5999")
+        .send(testVotes)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("article not found!");
+        });
   });
-  test("error status: 400 - one of the values is missing", () => {
-    const testNewComment = { username: "butter_bridge" };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(testNewComment)
-      .expect(400)
-      .then((res) => {
-        expect(res.body.msg).toBe("required values missing!");
-      });
-  });
-  test("error status: 400 - all values are missing", () => {
-    const testNewComment = {};
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(testNewComment)
-      .expect(400)
-      .then((res) => {
-        expect(res.body.msg).toBe("required values missing!");
-      });
-  });
-  test("error status: 404 - valid but non-existent article id", () => {
-    const testNewComment = {
-      username: "butter_bridge",
-      body: " I carry a log — yes. Is it funny to you? It is not to me.",
-    };
-    return request(app)
-      .post("/api/articles/5999/comments")
-      .send(testNewComment)
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("article not found!");
-      });
-  });
-  test('error status: 404 - username not found', () => {
-    const testNewComment = {
-      username: "not_a_username",
-      body: "I carry a log — yes. Is it funny to you? It is not to me.",
-    };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(testNewComment)
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("username not found!");
-      });
   });
 });
