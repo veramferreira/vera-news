@@ -10,6 +10,7 @@ const {
   patchVotesByArticleId,
 } = require("./controllers/articles.controller");
 const { deleteComment } = require("./controllers/comments.controller");
+const { getUsers } = require("./controllers/users.controllers");
 const app = express();
 
 app.use(express.json())
@@ -27,6 +28,8 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId)
 app.patch("/api/articles/:article_id", patchVotesByArticleId)
 
 app.delete("/api/comments/:comment_id", deleteComment)
+
+app.get('/api/users', getUsers)
 
 // Error handling
 

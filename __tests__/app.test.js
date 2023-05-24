@@ -369,7 +369,7 @@ describe("PATCH - /api/articles/:article_id", () => {
   });
 });
 
-describe.only("DELETE - /api/comments/:comment_id", () => {
+describe("DELETE - /api/comments/:comment_id", () => {
   describe("DELETE - status 204 - comment deleted", () => {
     test("should delete the comment selected", () => {
       return request(app)
@@ -397,5 +397,22 @@ describe.only("DELETE - /api/comments/:comment_id", () => {
         expect(res.body.msg).toBe('bad request: invalid data type!')
       })
     });
+  });
+});
+
+describe.only('GET /api/users', () => {
+  test('should return an array of objects with the following properties: username, name, avatar_url', () => {
+    return request(app)
+    .get('/api/users')
+    .expect(200)
+    .then((res) => {
+      const {users} = res.body
+      expect(users).toHaveLength(4)
+      users.forEach((user) => {
+        expect(typeof user.username).toBe("string");
+            expect(typeof user.name).toBe("string");
+            expect(typeof user.avatar_url).toBe("string");
+      })
+    })
   });
 });
