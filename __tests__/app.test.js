@@ -365,19 +365,37 @@ describe("PATCH - /api/articles/:article_id", () => {
         .then((res) => {
           expect(res.body.msg).toBe("article not found!");
         });
-  });
+    });
   });
 });
 
-// describe.only('DELETE - /api/comments/:comment_id', () => {
-//   describe('DELETE - status 204 - content deleted', () => {
-//     test('should delete the comment selected', () => {
-//       return request(app)
-//       .delete("/api/comments/3")
-//       .expect(204)
-//       .then((res) => {
-//         console.log(res);
-//       })
-//     });
-//   });
-// });
+describe.only("DELETE - /api/comments/:comment_id", () => {
+  describe("DELETE - status 204 - comment deleted", () => {
+    test("should delete the comment selected", () => {
+      return request(app)
+        .delete("/api/comments/3")
+        .expect(204)
+        .then((res) => {
+          expect(res.body).toEqual({});
+        });
+    });
+  });
+  describe('DELETE - error status', () => {
+    test('status 404 - comment id not found', () => {
+      return request(app)
+      .delete("/api/comments/100000")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("comment not found!")
+      })
+    });
+    test('status 400 - wrong data type inserted', () => {
+      return request(app)
+      .delete('/api/comments/pikachu')
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe('bad request: invalid data type!')
+      })
+    });
+  });
+});
